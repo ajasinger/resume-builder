@@ -20,7 +20,15 @@ export default function Form() {
     const handleFormSubmit = async(e) => {
         e.preventDefault();
         
-        const res = await fetch('/api/profileData');
+        const res = await fetch('/api/profileData', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name
+            })
+        });
 
         if(!res.ok) {
             setError(true);

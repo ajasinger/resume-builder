@@ -1,36 +1,50 @@
 import { NextResponse } from 'next/server';
 import puppeteer from 'puppeteer';
 
-export async function GET(request) {
+export async function POST(request) {
+
+    const {name} = await request.json();
+
+    if(!name) return NextResponse.json({ error: 'Please provide a name' }, { status: 400 });
 
     try{
 
-        // Launch the browser, open a new blank page, navigate the page to a URL & wait for page to load
-        const browser = await puppeteer.launch({ headless: false });
+        //navigate to login page in new browser
+        const browser = await puppeteer.launch({ headless: true });
         const page = await browser.newPage();
-        await page.goto('https://www.linkedin.com/in/ajasinger', {
-            waitUntil: 'networkidle2',
+        await page.goto('https://www.linkedin.com/in/login');
+
+        //login
+        await page.type('#username', process.env.LINKEDIN_USERNAME);
+        await page.type('#password', process.env.LINKEDIN_PASSWORD);
+        await page.click('button[type="submit"]');
+
+        await page.waitForNavigation();
+
+        //navigate to profile page 
+        // await page.goto(`https://www.linkedin.com/in/${name}`, { waitUntil: 'networkidle2' });
+        await page.goto(`https://www.linkedin.com/in/ajasinger`, { waitUntil: 'networkidle2' });
+
+        //get user info
+        const profileData = await page.evaluate(() => {
+            const name = document.querySelector('.pv-top-card--list li').innerText;
+            const profilePhoto = document.querySelector('.pv-top-card__photo img').src;
+            const workExperience = Array.from(
+              document.querySelectorAll('.experience-section .pv-position-entity')
+            ).map((exp) => {
+              const title = exp.querySelector('h3').innerText;
+              const company = exp.querySelector('.pv-entity__secondary-title').innerText;
+              const dates = exp.querySelector('.pv-entity__date-range span:nth-child(2)').innerText;
+              return { title, company, dates };
+            });
+            
+            return { name, profilePhoto, workExperience };
           });
 
-        // Extract data from the page using evaluate
-        const profileData = await page.evaluate(() => {
-
-            // You can customize the selectors based on what you need to scrape
-            const name = document.querySelector('.pv-text-details__left-panel h1')?.innerText;
-            const headline = document.querySelector('.text-body-medium')?.innerText;
-            const location = document.querySelector('.pv-top-card--list-bullet li')?.innerText;
-            
-            return {
-            name,
-            headline,
-            location,
-            };
-        });
-
-        // Log the scraped profile data
-        console.log('Profile Data:', profileData);
-        
+        //close window
         await browser.close();
+
+        console.log('profileData', profileData);
 
         return NextResponse.json(profileData);
 
