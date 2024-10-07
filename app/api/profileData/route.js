@@ -10,9 +10,9 @@ export async function POST(request) {
     try{
 
         //navigate to login page in new browser
-        const browser = await puppeteer.launch({ headless: true });
+        const browser = await puppeteer.launch({ headless: false });
         const page = await browser.newPage();
-        await page.goto('https://www.linkedin.com/in/login');
+        await page.goto('https://www.linkedin.com/login');
 
         //login
         await page.type('#username', process.env.LINKEDIN_USERNAME);
@@ -22,31 +22,42 @@ export async function POST(request) {
         await page.waitForNavigation();
 
         //navigate to profile page 
-        // await page.goto(`https://www.linkedin.com/in/${name}`, { waitUntil: 'networkidle2' });
-        await page.goto(`https://www.linkedin.com/in/ajasinger`, { waitUntil: 'networkidle2' });
+        //await page.goto(`https://www.linkedin.com/in/${name}`, { waitUntil: 'networkidle2' });
+        //await page.goto(`https://www.linkedin.com/in/ajasinger`, { waitUntil: 'networkidle0' });
+        await page.goto(`https://www.linkedin.com/in/${name}`);
+        await page.waitForNavigation({waitUntil: "networkidle0"});
+
+        // Wait for the first <h1> tag to appear and extract its text
+        const title = await page.evaluate(() => document.title);
+
+        console.log('title', title);
 
         //get user info
-        const profileData = await page.evaluate(() => {
-            const name = document.querySelector('.pv-top-card--list li').innerText;
-            const profilePhoto = document.querySelector('.pv-top-card__photo img').src;
-            const workExperience = Array.from(
-              document.querySelectorAll('.experience-section .pv-position-entity')
-            ).map((exp) => {
-              const title = exp.querySelector('h3').innerText;
-              const company = exp.querySelector('.pv-entity__secondary-title').innerText;
-              const dates = exp.querySelector('.pv-entity__date-range span:nth-child(2)').innerText;
-              return { title, company, dates };
-            });
+        // const profileData = await page.evaluate(() => {
+        //     //const name = document.querySelector('.pv-top-card--list li').innerText;
+        //     const name = document.querySelector('h1');
+        //     console.log('name', name)
+        //     // const profilePhoto = document.querySelector('.pv-top-card__photo img').src;
+        //     // const profilePhoto = document.querySelector('ember38').src;
+        //     // console.log('profilePhoto', profilePhoto)
+        //     // const workExperience = Array.from(
+        //     //   document.querySelectorAll('.experience-section .pv-position-entity')
+        //     // ).map((exp) => {
+        //     //   const title = exp.querySelector('h3').innerText;
+        //     //   const company = exp.querySelector('.pv-entity__secondary-title').innerText;
+        //     //   const dates = exp.querySelector('.pv-entity__date-range span:nth-child(2)').innerText;
+        //     //   return { title, company, dates };
+        //     // });
             
-            return { name, profilePhoto, workExperience };
-          });
+        //     return { name };
+        //   });
 
         //close window
         await browser.close();
 
-        console.log('profileData', profileData);
+        //console.log('profileData', profileData);
 
-        return NextResponse.json(profileData);
+        return NextResponse.json(title);
 
     }catch(error) {
         console.error('Error fetching user data', error);
