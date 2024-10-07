@@ -4,7 +4,6 @@ import puppeteer from 'puppeteer';
 export async function POST(request) {
 
     const {name} = await request.json();
-    console.log('name', name);
 
     if(!name) return NextResponse.json({ error: 'Please provide a name' }, { status: 400 });
 
@@ -22,13 +21,10 @@ export async function POST(request) {
 
         await page.waitForNavigation();
 
-        //navigate to profile page 
-        await page.goto(`https://www.linkedin.com/in/${name}`, { waitUntil: 'networkidle2' });
-        //await page.goto(`https://www.linkedin.com/in/ajasinger`, { waitUntil: 'networkidle2' });
-        //await page.goto(`https://www.linkedin.com/in/ajasinger`);
-        // await page.waitForNavigation({waitUntil: "networkidle0"});
-
+        //navigate to profile page and wait for section to load
+        await page.goto(`https://www.linkedin.com/in/${name}`);
         await page.waitForSelector('main.scaffold-layout__main');
+
         const divInnerText = await page.evaluate(() => {
             
             const mainDiv = document.querySelector('main.scaffold-layout__main');
@@ -41,10 +37,8 @@ export async function POST(request) {
             return { name, headline, profileImage };
         });
 
-        await page.goto(`https://www.linkedin.com/in/${name}/details/experience`, { waitUntil: 'networkidle2' });
-        //await page.goto(`https://www.linkedin.com/in/ajasinger/details/experience`);
-        // await page.waitForNavigation({waitUntil: "networkidle0"});
-
+        //navigate to experience page and wait for section to load
+        await page.goto(`https://www.linkedin.com/in/${name}/details/experience`);
         await page.waitForSelector('.pvs-list__container');
 
         // Extracting experience data
