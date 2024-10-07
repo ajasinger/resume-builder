@@ -4,6 +4,7 @@ import puppeteer from 'puppeteer';
 export async function POST(request) {
 
     const {name} = await request.json();
+    console.log('name', name);
 
     if(!name) return NextResponse.json({ error: 'Please provide a name' }, { status: 400 });
 
@@ -22,52 +23,71 @@ export async function POST(request) {
         await page.waitForNavigation();
 
         //navigate to profile page 
-        //await page.goto(`https://www.linkedin.com/in/${name}`, { waitUntil: 'networkidle2' });
-        //await page.goto(`https://www.linkedin.com/in/ajasinger`, { waitUntil: 'networkidle0' });
-        await page.goto(`https://www.linkedin.com/in/${name}`);
-        await page.waitForNavigation({waitUntil: "networkidle0"});
+        await page.goto(`https://www.linkedin.com/in/${name}`, { waitUntil: 'networkidle2' });
+        //await page.goto(`https://www.linkedin.com/in/ajasinger`, { waitUntil: 'networkidle2' });
+        //await page.goto(`https://www.linkedin.com/in/ajasinger`);
+        // await page.waitForNavigation({waitUntil: "networkidle0"});
 
-        // Wait for the first <h1> tag to appear and extract its text
-        const title = await page.evaluate(() => document.title);
-
-        console.log('title', title);
-
-        //get user info
-        // const profileData = await page.evaluate(() => {
-        //     //const name = document.querySelector('.pv-top-card--list li').innerText;
-        //     const name = document.querySelector('h1');
-        //     console.log('name', name)
-        //     // const profilePhoto = document.querySelector('.pv-top-card__photo img').src;
-        //     // const profilePhoto = document.querySelector('ember38').src;
-        //     // console.log('profilePhoto', profilePhoto)
-        //     // const workExperience = Array.from(
-        //     //   document.querySelectorAll('.experience-section .pv-position-entity')
-        //     // ).map((exp) => {
-        //     //   const title = exp.querySelector('h3').innerText;
-        //     //   const company = exp.querySelector('.pv-entity__secondary-title').innerText;
-        //     //   const dates = exp.querySelector('.pv-entity__date-range span:nth-child(2)').innerText;
-        //     //   return { title, company, dates };
-        //     // });
+        await page.waitForSelector('main.scaffold-layout__main');
+        const divInnerText = await page.evaluate(() => {
             
-        //     return { name };
-        //   });
+            const mainDiv = document.querySelector('main.scaffold-layout__main');
+    
+            // Extract name, headline, image src
+            const name = mainDiv.querySelector('h1').innerText;
+            const headline = mainDiv.querySelector('div.text-body-medium').innerText;
+            const profileImage = mainDiv.querySelector('img.evi-image.profile-photo-edit__preview')?.src;
+
+            return { name, headline, profileImage };
+        });
+
+        await page.goto(`https://www.linkedin.com/in/${name}/details/experience`, { waitUntil: 'networkidle2' });
+        //await page.goto(`https://www.linkedin.com/in/ajasinger/details/experience`);
+        // await page.waitForNavigation({waitUntil: "networkidle0"});
+
+        await page.waitForSelector('.pvs-list__container');
+
+        // Extracting experience data
+        const experienceData = await page.evaluate(() => {
+            const items = [];
+            const containerDiv = document.querySelector('.pvs-list__container');
+
+            if (containerDiv) {
+                const listItems = containerDiv.querySelectorAll('.display-flex.flex-column.full-width.align-self-center');
+
+                listItems.forEach(item => {
+                    let title = '';
+                    let duration = '';
+                    let company = '';
+                    let jobSummary = '';
+
+                    const jobDetails = item.querySelector('.display-flex.flex-row.justify-space-between');
+
+                    if (jobDetails) {
+                        title = jobDetails.querySelector('.display-flex.align-items-center.mr1.t-bold')?.innerText?.trim() || '';
+                        company = jobDetails.querySelector('.t-14.t-normal')?.innerText?.trim().split(' · ')[0] || '';
+                        duration = jobDetails.querySelector('.t-14.t-normal.t-black--light')?.innerText?.trim().split(' · ')[0] || '';
+                    }
+
+                    // Optional: Get the job summary if available
+                    jobSummary = item.querySelector('.pvs-entity__sub-components')?.innerText?.trim() || '';
+
+                    if (title && duration) {
+                        items.push({ title, company, duration, jobSummary });
+                    }
+                });
+            }
+
+            return items;
+        });
 
         //close window
         await browser.close();
 
-        //console.log('profileData', profileData);
-
-        return NextResponse.json(title);
+        return NextResponse.json({divInnerText, experienceData});
 
     }catch(error) {
         console.error('Error fetching user data', error);
         return NextResponse.json({ error: 'Error fetching user data' }, { status: 500 });
     }
 }
-
-
- // const res = await fetch('https://www.linkedin.com/in/');
-        // const html = await res.text();
-
-        // console.log(html);
-        // console.log('try ended')
