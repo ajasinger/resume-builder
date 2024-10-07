@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import RenderPdf from "./RenderPdf";
+import RenderResumePdf from "./RenderResumePdf";
 
 // Create a React web app that takes a LinkedIn URL and spits out a personalized PDF resume
 // Project Requirements:
@@ -59,7 +59,7 @@ export default function Form() {
                     Generate PDF
                 </button>
             </form>
-            < RenderPdf pdfData={pdfData} />
+            < RenderResumePdf pdfData={pdfData} />
         </div>
     )
 }
