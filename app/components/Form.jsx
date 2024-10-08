@@ -58,6 +58,7 @@ export default function Form() {
             setError('We were unable to create your resume. Please try again.');
         } finally {
             setLoading(false);
+            setName('');
         }
         
     }
@@ -84,12 +85,12 @@ export default function Form() {
                 <button 
                     type="submit" 
                     disabled={loading}
-                    className="bg-[#BBB7E2] hover:bg-[#DFD0FB] disabled:bg-transparent disabled:border-[#4F4F4F] font-bold py-4 rounded-full px-12 text-xl flex-row fade-in-animation delay-2000 w-fit text-nowrap"
+                    className="bg-[#BBB7E2] hover:bg-[#DFD0FB] border border-transparent disabled:bg-transparent disabled:border-[#4F4F4F] font-bold py-4 rounded-full px-12 text-xl flex-row fade-in-animation delay-2000 w-fit text-nowrap"
                 >
                     {loading ? 'Generating...' : 'Create Resume'}
                 </button>
             </form>
-            {/* {pdfData && */}
+            {pdfData &&
                 <div className='flex justify-center'>
                     <PDFDownloadLink
                         document={<RenderResumePdf pdfData={pdfData} />}
@@ -115,7 +116,7 @@ export default function Form() {
                         </div>
                     ))} */}
                 </div>
-            {/* } */}
+            }
         </div>
     )
 }
