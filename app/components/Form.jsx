@@ -6,14 +6,8 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 import { PDFViewer } from '@react-pdf/renderer';
 import Image from 'next/image';
 
-// Create a React web app that takes a LinkedIn URL and spits out a personalized PDF resume
-// Project Requirements:
+
 // - Deliver a Github repository, ready for npm i && npm start
-// - Use any web scraper you'd like, (or even the LinkedIn API if you manage to get access)
-// - Use react-pdf (https://react-pdf.org/) to generate the output
-// - The resume should include the full work and/or education sections. Anything else is optional
-// - Ensure the PDF contains a header and/or footer that repeats on every page
-// - Include the person's profile picture somewhere in the PDF
 
 export default function Form() {
     const [name, setName] = useState('');
@@ -51,8 +45,14 @@ export default function Form() {
             }
     
             const data = await res.json();
-            console.log('data', data);
-            setPdfData(data);
+            
+            if(data.error) {
+                console.log('error fetching data', data.error)
+                setError('We were unable to create your resume. Please try again.');
+            } else {
+                console.log('data', data); 
+                setPdfData(data);
+            }
 
         } catch(error) {
             console.log('error fetching data');
@@ -101,29 +101,9 @@ export default function Form() {
                         className="bg-[#BBB7E2] hover:bg-[#DFD0FB] font-bold py-4 rounded-full px-12 text-xl flex-row fade-in-animation delay-2000 w-fit text-nowrap"
                     >
                         {({ blob, url, loading, error }) =>
-                            'Download PDF Resume'
+                            "Download PDF Resume"
                         }
                     </PDFDownloadLink>
-                    <Image
-      src={pdfData?.bioData?.profileImage}
-      width={500}
-      height={500}
-      alt="Picture of the author"
-    />
-                    {/* <PDFViewer>
-                        <RenderResumePdf pdfData={pdfData} />
-                    </PDFViewer> */}
-                    {/* <p>name: {pdfData?.bioData?.name}</p>
-                    <p>headline: {pdfData?.bioData?.headline}</p>
-                    <p>profile image: {pdfData?.bioData?.profileImage}</p>
-                    {pdfData?.experienceData?.map((job, index) => (
-                        <div key={index} className="flex flex-col gap-2">
-                            company: {job?.company}
-                            time: {job?.duration}
-                            title: {job?.title}
-                            summary: {job?.jobSummary}
-                        </div>
-                    ))} */}
                 </div>
             }
         </div>
