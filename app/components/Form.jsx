@@ -29,6 +29,7 @@ export default function Form() {
 
         setLoading(true);
         setError('');
+        setPdfData('');
 
         try{
             const profileName = name.trim();
@@ -62,7 +63,7 @@ export default function Form() {
     }
 
     return(
-        <div>
+        <div className="flex flex-col gap-16 justify-center">
             <form onSubmit={handleFormSubmit} className="flex flex-wrap gap-4">
                 {/* <label htmlFor="name font-sans">Enter a Linkedin URL:</label> */}
                 <div className="flex gap-1 items-center text-[#4F4F4F] text-md font-sans bg-white py-4 rounded-full px-12 w-fit">
@@ -83,25 +84,26 @@ export default function Form() {
                 <button 
                     type="submit" 
                     disabled={loading}
-                    className="bg-[#BBB7E2] hover:bg-[#DFD0FB] disabled:bg-[#4F4F4F] font-bold py-4 rounded-full px-12 text-xl flex-row fade-in-animation delay-2000 w-fit text-nowrap"
+                    className="bg-[#BBB7E2] hover:bg-[#DFD0FB] disabled:bg-transparent disabled:border-[#4F4F4F] font-bold py-4 rounded-full px-12 text-xl flex-row fade-in-animation delay-2000 w-fit text-nowrap"
                 >
                     {loading ? 'Generating...' : 'Create Resume'}
                 </button>
             </form>
-            {pdfData &&
-                <div>
+            {/* {pdfData && */}
+                <div className='flex justify-center'>
                     <PDFDownloadLink
                         document={<RenderResumePdf pdfData={pdfData} />}
                         fileName="resume.pdf"
+                        className="bg-[#BBB7E2] hover:bg-[#DFD0FB] font-bold py-4 rounded-full px-12 text-xl flex-row fade-in-animation delay-2000 w-fit text-nowrap"
                     >
                         {({ blob, url, loading, error }) =>
-                            loading ? 'Loading document...' : 'Download PDF'
+                            'Download PDF Resume'
                         }
                     </PDFDownloadLink>
                     {/* <PDFViewer>
                         <RenderResumePdf pdfData={pdfData} />
                     </PDFViewer> */}
-                    <p>name: {pdfData?.bioData?.name}</p>
+                    {/* <p>name: {pdfData?.bioData?.name}</p>
                     <p>headline: {pdfData?.bioData?.headline}</p>
                     <p>profile image: {pdfData?.bioData?.profileImage}</p>
                     {pdfData?.experienceData?.map((job, index) => (
@@ -111,9 +113,9 @@ export default function Form() {
                             title: {job?.title}
                             summary: {job?.jobSummary}
                         </div>
-                    ))}
+                    ))} */}
                 </div>
-            }
+            {/* } */}
         </div>
     )
 }
