@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import RenderResumePdf from './RenderResumePdf';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+// import RenderResumePdf from './RenderResumePdf';
+// import { PDFDownloadLink } from '@react-pdf/renderer';
 
 // Create a React web app that takes a LinkedIn URL and spits out a personalized PDF resume
 // Project Requirements:
@@ -56,9 +56,9 @@ export default function Form() {
 
     return(
         <div>
-            <form onSubmit={handleFormSubmit} className="flex flex-col gap-4">
+            <form onSubmit={handleFormSubmit} className="flex gap-4">
                 {/* <label htmlFor="name font-sans">Enter a Linkedin URL:</label> */}
-                <div className="flex items-center text-[#4F4F4F] font-sans bg-white py-10 rounded-full px-12">
+                <div className="flex gap-1 items-center text-[#4F4F4F] text-md font-sans bg-white py-4 rounded-full px-12 w-fit">
                     <p>https://www.linkedin.com/in/</p>
                     <input 
                         id="name"
@@ -68,27 +68,29 @@ export default function Form() {
                         onChange={e => setName(e.target.value)}
                         autoComplete="name"
                         placeholder="janedoe"
-                        className="border-4 border-color:black rounded"
+                        required
+                        className="border-b-2 focus:outline-none"
                         //className="relative flex flex-col flex-nowrap items-center gap-4 text-gray-dark tablet:h-[62px] tablet:flex-row tablet:gap-0 tablet:rounded-[64px] tablet:bg-white tablet:py-[8px] tablet:pl-[24px] tablet:pr-[4px]"
                     />
                 </div>
                 <button 
                     type="submit" 
                     disabled={loading}
-                    className="bg-[#BBB7E2] hover:bg-[#DFD0FB] font-bold py-10 rounded-full px-12 text-[21px] flex-row fade-in-animation delay-2000 w-fit"
+                    className="bg-[#BBB7E2] hover:bg-[#DFD0FB] disabled:bg-[#4F4F4F] font-bold py-4 rounded-full px-12 text-xl flex-row fade-in-animation delay-2000 w-fit"
                     //className="whitespace-nowrap rounded-full cursor-default hover:cursor-pointer disabled:cursor-default flex items-center justify-center font-semibold  text-coal bg-primary hover:bg-primary-light active:bg-primary-dark disabled:bg-gray-extra-light disabled:text-gray px-12 h-14 min-h-14 text-[21px] flex-row fade-in-animation delay-2000 w-fit opacity-0"
                 >
-                    Generate PDF
+                    Create Resume
                 </button>
             </form>
-            <PDFDownloadLink
+        </div>
+    )
+}
+
+{/* <PDFDownloadLink
                     document={<RenderResumePdf />}
                     fileName="resume.pdf"
                 >
                     {({ blob, url, loading, error }) =>
                         loading ? 'Loading document...' : 'Download PDF'
                     }
-                </PDFDownloadLink>
-        </div>
-    )
-}
+                </PDFDownloadLink> */}

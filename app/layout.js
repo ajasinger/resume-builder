@@ -14,7 +14,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${sans.className} ${serif.className} text-[#1E1928] bg-[#EEEDF8] px-12 py-12`}
+        className={`${sans.className} ${serif.className} text-[#1E1928] bg-[#EEEDF8] px-12 py-24`}
       >
         {children}
       </body>
