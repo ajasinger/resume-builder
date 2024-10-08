@@ -32,7 +32,7 @@ export async function POST(request) {
             // Extract name, headline, image src
             const name = mainDiv.querySelector('h1').innerText;
             const headline = mainDiv.querySelector('div.text-body-medium').innerText;
-            const profileImage = mainDiv.querySelector('img.evi-image.profile-photo-edit__preview');
+            const profileImage = mainDiv.querySelector('img.evi-image.profile-photo-edit__preview').src;
 
             return { name, headline, profileImage };
         });

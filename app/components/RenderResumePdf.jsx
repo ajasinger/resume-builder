@@ -40,8 +40,8 @@ const styles = StyleSheet.create({
     marginBottom: 5
   },
   image: {
-    width: 100,
-    height: 100,
+    // width: 100,
+    // height: 100,
     borderRadius: 50,
     marginBottom: 20,
   },
@@ -71,6 +71,14 @@ export default function RenderResumePdf({ pdfData }) {
                       headline={pdfData?.bioData?.headline} 
                     />
                     {/* Body */}
+                    {pdfData?.bioData?.profileImage &&
+                      <Image
+                        style={styles.image}
+                        src={pdfData?.bioData?.profileImage}
+                        width={100}
+                        height={100}
+                      />
+                    }
                     <View style={styles.section}>
                     <Text style={styles.bodyHeader}>Experience</Text>
                     {pdfData?.experienceData && pdfData?.experienceData?.map((job, index) => (

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import RenderResumePdf from './RenderResumePdf';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { PDFViewer } from '@react-pdf/renderer';
+import Image from 'next/image';
 
 // Create a React web app that takes a LinkedIn URL and spits out a personalized PDF resume
 // Project Requirements:
@@ -65,31 +66,33 @@ export default function Form() {
 
     return(
         <div className="flex flex-col gap-16 justify-center">
-            <form onSubmit={handleFormSubmit} className="flex flex-wrap gap-4">
-                {/* <label htmlFor="name font-sans">Enter a Linkedin URL:</label> */}
-                <div className="flex gap-1 items-center text-[#4F4F4F] text-md font-sans bg-white py-4 rounded-full px-12 w-fit">
-                    <p>https://www.linkedin.com/in/</p>
-                    <input 
-                        id="name"
-                        name="name"
-                        type="text"
-                        value={name}
-                        onChange={e => setName(e.target.value)}
-                        autoComplete="name"
-                        placeholder="janesmith"
-                        className="border-b-2 focus:outline-none"
-                        aria-label='complete the LinkedIn URL with a username'
-                    />
-                </div>
+            <div className="flex flex-col gap-4">
+                <form onSubmit={handleFormSubmit} className="flex flex-wrap gap-4">
+                    {/* <label htmlFor="name font-sans">Enter a Linkedin URL:</label> */}
+                    <div className="flex gap-1 items-center text-[#4F4F4F] text-md font-sans bg-white py-4 rounded-full px-12 w-fit">
+                        <p>https://www.linkedin.com/in/</p>
+                        <input 
+                            id="name"
+                            name="name"
+                            type="text"
+                            value={name}
+                            onChange={e => setName(e.target.value)}
+                            autoComplete="name"
+                            placeholder="janesmith"
+                            className="border-b-2 focus:outline-none"
+                            aria-label='complete the LinkedIn URL with a username'
+                        />
+                    </div>
+                    <button 
+                        type="submit" 
+                        disabled={loading}
+                        className="bg-[#BBB7E2] hover:bg-[#DFD0FB] border border-transparent disabled:bg-transparent disabled:border-[#4F4F4F] font-bold py-4 rounded-full px-12 text-xl flex-row fade-in-animation delay-2000 w-fit text-nowrap"
+                    >
+                        {loading ? 'Generating...' : 'Create Resume'}
+                    </button>
+                </form>
                 {error && <p className="text-red-600">{error}</p>}
-                <button 
-                    type="submit" 
-                    disabled={loading}
-                    className="bg-[#BBB7E2] hover:bg-[#DFD0FB] border border-transparent disabled:bg-transparent disabled:border-[#4F4F4F] font-bold py-4 rounded-full px-12 text-xl flex-row fade-in-animation delay-2000 w-fit text-nowrap"
-                >
-                    {loading ? 'Generating...' : 'Create Resume'}
-                </button>
-            </form>
+            </div>
             {pdfData &&
                 <div className='flex justify-center'>
                     <PDFDownloadLink
@@ -101,6 +104,12 @@ export default function Form() {
                             'Download PDF Resume'
                         }
                     </PDFDownloadLink>
+                    <Image
+      src={pdfData?.bioData?.profileImage}
+      width={500}
+      height={500}
+      alt="Picture of the author"
+    />
                     {/* <PDFViewer>
                         <RenderResumePdf pdfData={pdfData} />
                     </PDFViewer> */}
