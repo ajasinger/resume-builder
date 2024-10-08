@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-// import RenderResumePdf from './RenderResumePdf';
-// import { PDFDownloadLink } from '@react-pdf/renderer';
+import RenderResumePdf from './RenderResumePdf';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import { PDFViewer } from '@react-pdf/renderer';
 
 // Create a React web app that takes a LinkedIn URL and spits out a personalized PDF resume
 // Project Requirements:
@@ -81,21 +82,38 @@ export default function Form() {
                 {error && <p className="text-red-600">{error}</p>}
                 <button 
                     type="submit" 
-                    disabled={ loading || !name }
+                    disabled={loading}
                     className="bg-[#BBB7E2] hover:bg-[#DFD0FB] disabled:bg-[#4F4F4F] font-bold py-4 rounded-full px-12 text-xl flex-row fade-in-animation delay-2000 w-fit text-nowrap"
                 >
                     {loading ? 'Generating...' : 'Create Resume'}
                 </button>
             </form>
+            {pdfData &&
+                <div>
+                    <PDFDownloadLink
+                        document={<RenderResumePdf pdfData={pdfData} />}
+                        fileName="resume.pdf"
+                    >
+                        {({ blob, url, loading, error }) =>
+                            loading ? 'Loading document...' : 'Download PDF'
+                        }
+                    </PDFDownloadLink>
+                    {/* <PDFViewer>
+                        <RenderResumePdf pdfData={pdfData} />
+                    </PDFViewer> */}
+                    <p>name: {pdfData?.bioData?.name}</p>
+                    <p>bio: {pdfData?.bioData?.headline}</p>
+                    <p>bio: {pdfData?.bioData?.profileImage}</p>
+                    {pdfData.experienceData?.map((job, index) => (
+                        <div key={index}>
+                            {job?.company}
+                            {job?.duration}
+                            {job?.title}
+                            {job?.jobSummary}
+                        </div>
+                    ))}
+                </div>
+            }
         </div>
     )
 }
-
-{/* <PDFDownloadLink
-                    document={<RenderResumePdf />}
-                    fileName="resume.pdf"
-                >
-                    {({ blob, url, loading, error }) =>
-                        loading ? 'Loading document...' : 'Download PDF'
-                    }
-                </PDFDownloadLink> */}
