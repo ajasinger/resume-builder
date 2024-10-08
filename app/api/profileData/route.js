@@ -32,7 +32,7 @@ export async function POST(request) {
             // Extract name, headline, image src
             const name = mainDiv.querySelector('h1').innerText;
             const headline = mainDiv.querySelector('div.text-body-medium').innerText;
-            const profileImage = mainDiv.querySelector('img.evi-image.profile-photo-edit__preview')?.src;
+            const profileImage = mainDiv.querySelector('img.evi-image.profile-photo-edit__preview');
 
             return { name, headline, profileImage };
         });
@@ -67,8 +67,8 @@ export async function POST(request) {
                     const jobSummaryRaw = item.querySelector('.pvs-entity__sub-components')?.innerText?.split("Skills:")[0].trim() || '';
 
                     //remove duplicate text
-                    const removeDuplicateText = text => [...new Set(text.split('\n'))].join('\n');
-                    jobSummary = removeDuplicateText(jobSummaryRaw);
+                    const removeDuplicateSentence = text => [...new Set(text.split('\n'))].join('\n');
+                    jobSummary = removeDuplicateSentence(jobSummaryRaw);
 
 
                     if (title && duration) {
