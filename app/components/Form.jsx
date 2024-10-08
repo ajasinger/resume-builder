@@ -17,25 +17,33 @@ export default function Form() {
     const [name, setName] = useState('');
     const [loading, setLoading] = useState(false);
     const [pdfData, setPdfData] = useState(null);
-    const [error, setError] = useState(false);
+    const [error, setError] = useState('');
 
     const handleFormSubmit = async(e) => {
         e.preventDefault();
+
+        if(!name) {
+            setError('Please enter a valid LinkedIn profile URL.')
+        }
+
         setLoading(true);
+        setError('');
 
         try{
+            const profileName = name.trim();
+
             const res = await fetch('/api/profileData', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    name
+                    name: profileName
                 })
             });
     
             if(!res.ok) {
-                setError(true);
+                setError('We were unable to create your resume. Please try again.');
                 console.log('fetch error in handleFormSubmit')
             }
     
@@ -44,10 +52,8 @@ export default function Form() {
             setPdfData(data);
 
         } catch(error) {
-
             console.log('error fetching data');
-            setError(true);
-        
+            setError('We were unable to create your resume. Please try again.');
         } finally {
             setLoading(false);
         }
@@ -56,7 +62,7 @@ export default function Form() {
 
     return(
         <div>
-            <form onSubmit={handleFormSubmit} className="flex gap-4">
+            <form onSubmit={handleFormSubmit} className="flex flex-wrap gap-4">
                 {/* <label htmlFor="name font-sans">Enter a Linkedin URL:</label> */}
                 <div className="flex gap-1 items-center text-[#4F4F4F] text-md font-sans bg-white py-4 rounded-full px-12 w-fit">
                     <p>https://www.linkedin.com/in/</p>
@@ -67,19 +73,18 @@ export default function Form() {
                         value={name}
                         onChange={e => setName(e.target.value)}
                         autoComplete="name"
-                        placeholder="janedoe"
-                        required
+                        placeholder="janesmith"
                         className="border-b-2 focus:outline-none"
-                        //className="relative flex flex-col flex-nowrap items-center gap-4 text-gray-dark tablet:h-[62px] tablet:flex-row tablet:gap-0 tablet:rounded-[64px] tablet:bg-white tablet:py-[8px] tablet:pl-[24px] tablet:pr-[4px]"
+                        aria-label='complete the LinkedIn URL with a username'
                     />
                 </div>
+                {error && <p className="text-red-600">{error}</p>}
                 <button 
                     type="submit" 
-                    disabled={loading}
-                    className="bg-[#BBB7E2] hover:bg-[#DFD0FB] disabled:bg-[#4F4F4F] font-bold py-4 rounded-full px-12 text-xl flex-row fade-in-animation delay-2000 w-fit"
-                    //className="whitespace-nowrap rounded-full cursor-default hover:cursor-pointer disabled:cursor-default flex items-center justify-center font-semibold  text-coal bg-primary hover:bg-primary-light active:bg-primary-dark disabled:bg-gray-extra-light disabled:text-gray px-12 h-14 min-h-14 text-[21px] flex-row fade-in-animation delay-2000 w-fit opacity-0"
+                    disabled={ loading || !name }
+                    className="bg-[#BBB7E2] hover:bg-[#DFD0FB] disabled:bg-[#4F4F4F] font-bold py-4 rounded-full px-12 text-xl flex-row fade-in-animation delay-2000 w-fit text-nowrap"
                 >
-                    Create Resume
+                    {loading ? 'Generating...' : 'Create Resume'}
                 </button>
             </form>
         </div>
