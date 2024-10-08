@@ -63,8 +63,13 @@ export async function POST(request) {
                         duration = jobDetails.querySelector('.t-14.t-normal.t-black--light')?.innerText?.trim().split(' · ')[0].split('\n')[0] || '';
                     }
 
-                    // Optional: Get the job summary if available
-                    jobSummary = item.querySelector('.pvs-entity__sub-components')?.innerText?.split("Skills:")[0].trim() || '';
+                    // if job summary exists
+                    const jobSummaryRaw = item.querySelector('.pvs-entity__sub-components')?.innerText?.split("Skills:")[0].trim() || '';
+
+                    //remove duplicate text
+                    const removeDuplicateText = text => [...new Set(text.split('\n'))].join('\n');
+                    jobSummary = removeDuplicateText(jobSummaryRaw);
+
 
                     if (title && duration) {
                         items.push({ title, company, duration, jobSummary });
