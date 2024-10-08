@@ -22,11 +22,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   bodyHeader: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  bodySubHeader: {
     fontSize: 14,
-    fontWeight: 'bold'
+    marginBottom: 5,
+    fontWeight: 'semibold'
   },
   text: {
     fontSize: 12,
+    marginBottom: 2,
   },
   greyText: {
     fontSize: 12,
@@ -55,10 +62,10 @@ export default function RenderResumePdf({ pdfData }) {
 
                     {/* Body */}
                     <View style={styles.section}>
-                    <Text style={styles.subHeader}>Experience</Text>
+                    <Text style={styles.bodyHeader}>Experience</Text>
                     {pdfData?.experienceData && pdfData?.experienceData?.map((job, index) => (
                         <View key={index} style={{ marginBottom: 10 }}>
-                        <Text style={styles.bodyHeader}>{job.title}</Text>
+                        <Text style={styles.bodySubHeader}>{job.title}</Text>
                         <Text style={styles.text}>{job.company}</Text>
                         <Text style={styles.greyText}>{job.duration}</Text>
                         <Text style={styles.text}>{job.jobSummary}</Text>
