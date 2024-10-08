@@ -9,6 +9,15 @@ const styles = StyleSheet.create({
   section: {
     marginBottom: 20,
   },
+  headerSection: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  nameContainer: {
+    flexDirection: 'column',
+  },
   header: {
     fontSize: 20,
     textAlign: 'center',
@@ -17,7 +26,6 @@ const styles = StyleSheet.create({
   },
   subHeader: {
     fontSize: 14,
-    marginBottom: 15,
     textAlign: 'center',
   },
   bodyHeader: {
@@ -40,61 +48,52 @@ const styles = StyleSheet.create({
     marginBottom: 5
   },
   image: {
-    // width: 100,
-    // height: 100,
+    width: 50,
+    height: 50,
     borderRadius: 50,
     marginBottom: 20,
   },
 });
 
 // Define Header component
-const Header = ({ name, headline }) => (
-  <View fixed style={styles.section}>
-    <Text style={styles.header}>{name}</Text>
-    <Text style={styles.subHeader}>{headline}</Text>
+const Header = ({ name, headline, profileImage }) => (
+  <View fixed style={styles.headerSection}>
+    <View>
+      {name && <Text style={styles.header}>{name}</Text>}
+      {headline && <Text style={styles.subHeader}>{headline}</Text>}
+    </View>
+    {profileImage && (
+      <Image
+        style={styles.image}
+        src={profileImage}
+      />
+    )}
   </View>
 );
 
-
 export default function RenderResumePdf({ pdfData }) {
-    return(
-            <Document>
-                <Page size="A4" style={styles.page}> 
-                    {/* Header */}
-                    {/* <View style={styles.section}>
-                    <Text style={styles.header}>{pdfData?.bioData?.name}</Text> */}
-                    {/* {pdfData?.src && pdfData?.src && <Image style={styles.image} src={pdfData?.src} />} */}
-                    {/* <Text style={styles.subHeader}>{pdfData?.bioData?.headline}</Text>
-                    </View>  */}
-                    <Header 
-                      name={pdfData?.bioData?.name} 
-                      headline={pdfData?.bioData?.headline} 
-                    />
-                    {/* Body */}
-                    {pdfData?.bioData?.profileImage &&
-                      <Image
-                        style={styles.image}
-                        src={pdfData?.bioData?.profileImage}
-                        width={100}
-                        height={100}
-                      />
-                    }
-                    <View style={styles.section}>
-                    <Text style={styles.bodyHeader}>Experience</Text>
-                    {pdfData?.experienceData && pdfData?.experienceData?.map((job, index) => (
-                        <View key={index} style={{ marginBottom: 10 }}>
-                        <Text style={styles.bodySubHeader}>{job.title}</Text>
-                        <Text style={styles.text}>{job.company}</Text>
-                        <Text style={styles.greyText}>{job.duration}</Text>
-                        {job.jobSummary && <Text style={styles.text}>{job.jobSummary}</Text>}
-                        </View>
-                    ))}
-                    </View> 
-                </Page>
-            </Document> 
-    )
+  return (
+    <Document>
+      <Page size="A4" style={styles.page}>
+        {/* Header */}
+        <Header
+          name={pdfData?.bioData?.name}
+          headline={pdfData?.bioData?.headline}
+          profileImage={pdfData?.bioData?.profileImage}
+        />
+        {/* Body */}
+        <View style={styles.section}>
+          <Text style={styles.bodyHeader}>Experience</Text>
+          {pdfData?.experienceData?.map((job, index) => (
+            <View key={index} style={{ marginBottom: 10 }}>
+              <Text style={styles.bodySubHeader}>{job.title}</Text>
+              <Text style={styles.text}>{job.company}</Text>
+              <Text style={styles.greyText}>{job.duration}</Text>
+              {job.jobSummary && <Text style={styles.text}>{job.jobSummary}</Text>}
+            </View>
+          ))}
+        </View>
+      </Page>
+    </Document>
+  );
 }
-
-
-
-
