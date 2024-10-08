@@ -58,9 +58,9 @@ export async function POST(request) {
                     const jobDetails = item.querySelector('.display-flex.flex-row.justify-space-between');
 
                     if (jobDetails) {
-                        title = jobDetails.querySelector('.display-flex.align-items-center.mr1.t-bold')?.innerText?.trim().split('/n')[0] || '';
-                        company = jobDetails.querySelector('.t-14.t-normal')?.innerText?.trim().split(' · ')[0].split('/n')[0] || '';
-                        duration = jobDetails.querySelector('.t-14.t-normal.t-black--light')?.innerText?.trim().split(' · ')[0].split('/n')[0] || '';
+                        title = jobDetails.querySelector('.display-flex.align-items-center.mr1.t-bold')?.innerText?.trim().split('\n')[0] || '';
+                        company = jobDetails.querySelector('.t-14.t-normal')?.innerText?.trim().split(' · ')[0].split('\n')[0] || '';
+                        duration = jobDetails.querySelector('.t-14.t-normal.t-black--light')?.innerText?.trim().split(' · ')[0].split('\n')[0] || '';
                     }
 
                     // Optional: Get the job summary if available
