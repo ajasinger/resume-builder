@@ -10,7 +10,7 @@ export async function POST(request) {
     try{
 
         //navigate to login page in new browser
-        const browser = await puppeteer.launch({ headless: false });
+        const browser = await puppeteer.launch({ headless: true });
         const page = await browser.newPage();
         await page.goto('https://www.linkedin.com/login');
 
