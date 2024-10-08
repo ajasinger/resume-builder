@@ -102,14 +102,14 @@ export default function Form() {
                         <RenderResumePdf pdfData={pdfData} />
                     </PDFViewer> */}
                     <p>name: {pdfData?.bioData?.name}</p>
-                    <p>bio: {pdfData?.bioData?.headline}</p>
-                    <p>bio: {pdfData?.bioData?.profileImage}</p>
-                    {pdfData.experienceData?.map((job, index) => (
-                        <div key={index}>
-                            {job?.company}
-                            {job?.duration}
-                            {job?.title}
-                            {job?.jobSummary}
+                    <p>headline: {pdfData?.bioData?.headline}</p>
+                    <p>profile image: {pdfData?.bioData?.profileImage}</p>
+                    {pdfData?.experienceData?.map((job, index) => (
+                        <div key={index} className="flex flex-col gap-2">
+                            company: {job?.company}
+                            time: {job?.duration}
+                            title: {job?.title}
+                            summary: {job?.jobSummary}
                         </div>
                     ))}
                 </div>
