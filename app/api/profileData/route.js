@@ -25,7 +25,7 @@ export async function POST(request) {
         await page.goto(`https://www.linkedin.com/in/${name}`);
         await page.waitForSelector('main.scaffold-layout__main');
 
-        const divInnerText = await page.evaluate(() => {
+        const bioData = await page.evaluate(() => {
             
             const mainDiv = document.querySelector('main.scaffold-layout__main');
     
@@ -78,7 +78,7 @@ export async function POST(request) {
         //close window
         await browser.close();
 
-        return NextResponse.json({divInnerText, experienceData});
+        return NextResponse.json({bioData, experienceData});
 
     }catch(error) {
         console.error('Error fetching user data', error);
