@@ -12,23 +12,22 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 20,
     textAlign: 'center',
-    marginBottom: 20,
-    position: 'fixed',
+    marginBottom: 10,
     fontWeight: 'bold'
   },
   subHeader: {
     fontSize: 14,
-    marginBottom: 10,
+    marginBottom: 20,
     textAlign: 'center',
   },
   bodyHeader: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: 10,
   },
   bodySubHeader: {
     fontSize: 14,
-    marginBottom: 5,
+    marginBottom: 2,
     fontWeight: 'semibold'
   },
   text: {
@@ -48,18 +47,29 @@ const styles = StyleSheet.create({
   },
 });
 
+// Define Header component
+const Header = ({ name, headline }) => (
+  <View fixed style={styles.section}>
+    <Text style={styles.header}>{name}</Text>
+    <Text style={styles.subHeader}>{headline}</Text>
+  </View>
+);
+
 
 export default function RenderResumePdf({ pdfData }) {
     return(
             <Document>
                 <Page size="A4" style={styles.page}> 
                     {/* Header */}
-                    <View style={styles.section}>
-                    <Text style={styles.header}>{pdfData?.bioData?.name}</Text>
+                    {/* <View style={styles.section}>
+                    <Text style={styles.header}>{pdfData?.bioData?.name}</Text> */}
                     {/* {pdfData?.src && pdfData?.src && <Image style={styles.image} src={pdfData?.src} />} */}
-                    <Text style={styles.subHeader}>{pdfData?.bioData?.headline}</Text>
-                    </View> 
-
+                    {/* <Text style={styles.subHeader}>{pdfData?.bioData?.headline}</Text>
+                    </View>  */}
+                    <Header 
+                      name={pdfData?.bioData?.name} 
+                      headline={pdfData?.bioData?.headline} 
+                    />
                     {/* Body */}
                     <View style={styles.section}>
                     <Text style={styles.bodyHeader}>Experience</Text>
@@ -68,7 +78,7 @@ export default function RenderResumePdf({ pdfData }) {
                         <Text style={styles.bodySubHeader}>{job.title}</Text>
                         <Text style={styles.text}>{job.company}</Text>
                         <Text style={styles.greyText}>{job.duration}</Text>
-                        <Text style={styles.text}>{job.jobSummary}</Text>
+                        {job.jobSummary && <Text style={styles.text}>{job.jobSummary}</Text>}
                         </View>
                     ))}
                     </View> 
