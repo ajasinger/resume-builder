@@ -3,11 +3,6 @@
 import { useState } from 'react';
 import RenderResumePdf from './RenderResumePdf';
 import { PDFDownloadLink } from '@react-pdf/renderer';
-import { PDFViewer } from '@react-pdf/renderer';
-import Image from 'next/image';
-
-
-// - Deliver a Github repository, ready for npm i && npm start
 
 export default function Form() {
     const [name, setName] = useState('');
@@ -67,8 +62,8 @@ export default function Form() {
     return(
         <div className="flex flex-col gap-16 justify-center">
             <div className="flex flex-col gap-4">
+                {/* LinkedIn username input */}
                 <form onSubmit={handleFormSubmit} className="flex flex-wrap gap-4">
-                    {/* <label htmlFor="name font-sans">Enter a Linkedin URL:</label> */}
                     <div className="flex gap-1 items-center text-[#4F4F4F] text-md font-sans bg-white py-4 rounded-full px-12 w-fit">
                         <p>https://www.linkedin.com/in/</p>
                         <input 
@@ -93,6 +88,7 @@ export default function Form() {
                 </form>
                 {error && <p className="text-red-600">{error}</p>}
             </div>
+            {/* Generate PDF button */}
             {pdfData &&
                 <div className='flex justify-center'>
                     <PDFDownloadLink

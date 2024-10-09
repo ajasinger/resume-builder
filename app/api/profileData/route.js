@@ -29,7 +29,7 @@ export async function POST(request) {
             
             const mainDiv = document.querySelector('main.scaffold-layout__main');
     
-            // Extract name, headline, image src
+            //extract name, headline, image src
             const name = mainDiv.querySelector('h1').innerText;
             const headline = mainDiv.querySelector('div.text-body-medium').innerText;
             const profileImage = mainDiv.querySelector('img.evi-image.profile-photo-edit__preview').src;
@@ -41,7 +41,7 @@ export async function POST(request) {
         await page.goto(`https://www.linkedin.com/in/${name}/details/experience`);
         await page.waitForSelector('.pvs-list__container');
 
-        // Extracting experience data
+        //extract experience data
         const experienceData = await page.evaluate(() => {
             const items = [];
             const containerDiv = document.querySelector('.pvs-list__container');
@@ -51,7 +51,7 @@ export async function POST(request) {
 
                 listItems.forEach(item => {
                     let title = '';
-                    let duration = '';
+                    let dates = '';
                     let company = '';
                     let jobSummary = '';
 
@@ -60,7 +60,7 @@ export async function POST(request) {
                     if (jobDetails) {
                         title = jobDetails.querySelector('.display-flex.align-items-center.mr1.t-bold')?.innerText?.trim().split('\n')[0] || '';
                         company = jobDetails.querySelector('.t-14.t-normal')?.innerText?.trim().split(' · ')[0].split('\n')[0] || '';
-                        duration = jobDetails.querySelector('.t-14.t-normal.t-black--light')?.innerText?.trim().split(' · ')[0].split('\n')[0] || '';
+                        dates = jobDetails.querySelector('.t-14.t-normal.t-black--light')?.innerText?.trim().split(' · ')[0].split('\n')[0] || '';
                     }
 
                     // if job summary exists
@@ -72,7 +72,7 @@ export async function POST(request) {
 
 
                     if (title && duration) {
-                        items.push({ title, company, duration, jobSummary });
+                        items.push({ title, company, dates, jobSummary });
                     }
                 });
             }

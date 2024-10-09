@@ -88,7 +88,7 @@ export default function RenderResumePdf({ pdfData }) {
             <View key={index} style={{ marginBottom: 10 }}>
               <Text style={styles.bodySubHeader}>{job.title}</Text>
               <Text style={styles.text}>{job.company}</Text>
-              <Text style={styles.greyText}>{job.duration}</Text>
+              <Text style={styles.greyText}>{job.dates}</Text>
               {job.jobSummary && <Text style={styles.text}>{job.jobSummary}</Text>}
             </View>
           ))}
